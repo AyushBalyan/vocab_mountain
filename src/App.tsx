@@ -248,7 +248,7 @@ export default function App() {
               rel="noopener noreferrer"
               className="font-medium text-vm-ink underline decoration-vm-line/80 underline-offset-2 hover:text-vm-accent hover:decoration-vm-accent"
             >
-              GregMat
+              Arush Balyan
             </a>
             .
           </p>
