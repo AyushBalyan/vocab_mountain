@@ -239,6 +239,20 @@ export default function App() {
             </label>
           </div>
         </div>
+        <footer className="shrink-0 border-t border-vm-line px-5 py-4">
+          <p className="font-body text-[11px] leading-relaxed text-vm-muted">
+            Vocabulary data sourced from{' '}
+            <a
+              href="https://www.gregmat.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-vm-ink underline decoration-vm-line/80 underline-offset-2 hover:text-vm-accent hover:decoration-vm-accent"
+            >
+              GregMat
+            </a>
+            .
+          </p>
+        </footer>
       </aside>
     </>
   )
