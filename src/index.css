@@ -1,0 +1,83 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-display: 'Spectral', ui-serif, Georgia, serif;
+  --font-body: 'Newsreader', ui-serif, Georgia, serif;
+
+  --color-vm-bg: #ffffff;
+  --color-vm-paper: #ffffff;
+  --color-vm-sidebar: #fafafa;
+  --color-vm-ink: #1a1816;
+  --color-vm-muted: #5c5855;
+  --color-vm-accent: #b8452f;
+  --color-vm-accent-soft: rgba(184, 69, 47, 0.08);
+  --color-vm-line: rgba(26, 24, 22, 0.08);
+
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+
+  --animate-vmFade: vmFade 0.45s ease-out both;
+}
+
+@keyframes vmFade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes vmFade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+}
+
+.vm-grain > * {
+  position: relative;
+  z-index: 2;
+}
+
+.vm-grain::before {
+  content: '';
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280' viewBox='0 0 280 280'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.vm-grain::after {
+  content: '';
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background: radial-gradient(
+      ellipse 90% 55% at 8% -8%,
+      rgba(184, 69, 47, 0.04),
+      transparent 52%
+    ),
+    radial-gradient(
+      ellipse 65% 45% at 96% 102%,
+      rgba(26, 24, 22, 0.025),
+      transparent 48%
+    );
+}
