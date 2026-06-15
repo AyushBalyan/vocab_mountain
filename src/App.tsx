@@ -260,7 +260,13 @@ export default function App() {
   return (
     <div className="vm-grain relative isolate flex min-h-dvh flex-col bg-vm-bg font-body text-vm-ink">
       <header className="sticky top-0 z-30 flex items-center justify-between border-b border-vm-line bg-vm-bg/95 px-4 py-3 backdrop-blur-md md:px-6">
-        <h1 className="font-display text-xl font-semibold tracking-tight text-vm-ink md:text-2xl">
+        <h1 className="flex items-center gap-2.5 font-display text-xl font-semibold tracking-tight text-vm-ink md:gap-3 md:text-2xl">
+          <img
+            src="/Vocab_bloom_logo.png"
+            alt=""
+            aria-hidden
+            className="h-8 w-8 shrink-0 rounded-md object-contain md:h-9 md:w-9"
+          />
           Vocab Mountain
         </h1>
         <button

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { Volume2 } from 'lucide-react'
 import type { RecallMark, WordEntry } from '../types'
 
 type FlipCardProps = {
@@ -49,15 +50,7 @@ function PronounceButton({ url }: { url: string | null }) {
         })
       }}
     >
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        aria-hidden
-      >
-        <path d="M3 10v4c0 .55.45 1 1 1h3l3.29 3.29c.63.63 1.71.18 1.71-.71V6.41c0-.89-1.08-1.34-1.71-.71L7 9H4c-.55 0-1 .45-1 1zm13.5 2A4.5 4.5 0 0014 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 5.29v-.59C14 3.58 12.47 3 11.29 4.18L8 7H5c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1h3l3.29 3.29c1.18 1.17 3 .57 3-1.09v-.59a8.06 8.06 0 002.07-2.07 8 8 0 001.43-4.58 8 8 0 00-1.43-4.58A8.06 8.06 0 0018 7.97z" />
-      </svg>
+      <Volume2 size={20} aria-hidden strokeWidth={2} />
     </button>
   )
 }

@@ -1,10 +1,12 @@
 import {
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
   type ReactNode,
 } from 'react'
+import { RotateCcw } from 'lucide-react'
 import { FlipCard } from './FlipCard'
 import type { RecallMark, WordEntry } from '../types'
 
@@ -21,6 +23,132 @@ function isTypingTarget(el: EventTarget | null): boolean {
 }
 
 const SWIPE_MIN_PX = 56
+
+function numberPillClasses(
+  cardIndex: number,
+  currentIndex: number,
+  mark: RecallMark | undefined,
+): string {
+  const base =
+    'inline-flex h-8 min-w-8 shrink-0 items-center justify-center rounded-full border font-body text-xs font-medium tabular-nums transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1'
+
+  if (mark === 'forgotten') {
+    return `${base} ${
+      cardIndex === currentIndex
+        ? 'border-rose-500 bg-rose-100 text-rose-950 ring-2 ring-rose-400/60'
+        : 'border-rose-300/90 bg-rose-50 text-rose-900 hover:bg-rose-100/90'
+    }`
+  }
+
+  if (mark === 'remembered') {
+    return `${base} ${
+      cardIndex === currentIndex
+        ? 'border-emerald-600 bg-emerald-100 text-emerald-950 ring-2 ring-emerald-400/60'
+        : 'border-emerald-300/90 bg-emerald-50 text-emerald-900 hover:bg-emerald-100/90'
+    }`
+  }
+
+  return `${base} ${
+    cardIndex === currentIndex
+      ? 'border-vm-accent bg-vm-accent-soft text-vm-ink ring-2 ring-vm-accent/40'
+      : 'border-vm-line bg-vm-bg text-vm-muted hover:bg-vm-sidebar hover:text-vm-ink'
+  }`
+}
+
+function ScoreCard({
+  red,
+  green,
+  unvisited,
+}: {
+  red: number
+  green: number
+  unvisited: number
+}) {
+  return (
+    <div
+      className="grid w-full grid-cols-3 gap-2 rounded-lg border border-vm-line bg-vm-paper px-3 py-2.5 shadow-[var(--shadow-card)]"
+      aria-label="Session score"
+    >
+      <div className="flex flex-col items-center gap-0.5">
+        <span className="font-body text-[10px] font-semibold uppercase tracking-wide text-rose-700">
+          Red
+        </span>
+        <span className="font-display text-lg font-semibold tabular-nums text-rose-950">
+          {red}
+        </span>
+      </div>
+      <div className="flex flex-col items-center gap-0.5 border-x border-vm-line">
+        <span className="font-body text-[10px] font-semibold uppercase tracking-wide text-emerald-700">
+          Green
+        </span>
+        <span className="font-display text-lg font-semibold tabular-nums text-emerald-950">
+          {green}
+        </span>
+      </div>
+      <div className="flex flex-col items-center gap-0.5">
+        <span className="font-body text-[10px] font-semibold uppercase tracking-wide text-vm-muted">
+          Unvisited
+        </span>
+        <span className="font-display text-lg font-semibold tabular-nums text-vm-ink">
+          {unvisited}
+        </span>
+      </div>
+    </div>
+  )
+}
+
+function WordNumberBar({
+  deckLength,
+  currentIndex,
+  recallByIndex,
+  onSelect,
+}: {
+  deckLength: number
+  currentIndex: number
+  recallByIndex: Record<number, RecallMark>
+  onSelect: (index: number) => void
+}) {
+  const activeRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    activeRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+      inline: 'center',
+    })
+  }, [currentIndex])
+
+  if (deckLength === 0) return null
+
+  return (
+    <div
+      className="flex w-full gap-1.5 overflow-x-auto p-1 [-webkit-overflow-scrolling:touch] [scrollbar-width:thin]"
+      role="tablist"
+      aria-label="Cards in deck"
+    >
+      {Array.from({ length: deckLength }, (_, i) => (
+        <button
+          key={i}
+          ref={i === currentIndex ? activeRef : undefined}
+          type="button"
+          role="tab"
+          aria-selected={i === currentIndex}
+          aria-label={`Card ${i + 1}${
+            recallByIndex[i] === 'forgotten'
+              ? ', marked red'
+              : recallByIndex[i] === 'remembered'
+                ? ', marked green'
+                : ', unvisited'
+          }`}
+          onClick={() => onSelect(i)}
+          className={numberPillClasses(i, currentIndex, recallByIndex[i])}
+        >
+          {i + 1}
+        </button>
+      ))}
+    </div>
+  )
+}
 
 function swipePointerOk(e: React.PointerEvent): boolean {
   return e.pointerType === 'touch' || e.pointerType === 'pen'
@@ -211,6 +339,11 @@ export function StudySession({
     setIndex((i) => (i > 0 ? i - 1 : 0))
   }
 
+  function goToCard(cardIndex: number) {
+    setFlipped(false)
+    setIndex(cardIndex)
+  }
+
   function toggleFlip() {
     setFlipped((f) => !f)
   }
@@ -219,6 +352,21 @@ export function StudySession({
     deck.length > 0 ? Math.round(((index + 1) / deck.length) * 100) : 0
 
   const recallMark = recallByIndex[index]
+
+  const scores = useMemo(() => {
+    let red = 0
+    let green = 0
+    for (let i = 0; i < deck.length; i++) {
+      const mark = recallByIndex[i]
+      if (mark === 'forgotten') red++
+      else if (mark === 'remembered') green++
+    }
+    return { red, green, unvisited: deck.length - red - green }
+  }, [deck.length, recallByIndex])
+
+  const canReset =
+    deck.length > 0 &&
+    (scores.red > 0 || scores.green > 0 || index > 0 || flipped)
 
   if (phase === 'complete') {
     return (
@@ -247,13 +395,19 @@ export function StudySession({
   }
 
   return (
-    <div className="flex w-full max-w-xl flex-col items-center gap-6">
-      <div className="flex w-full items-center justify-between gap-4">
+    <div className="flex w-full max-w-xl flex-col items-center gap-5">
+      <ScoreCard
+        red={scores.red}
+        green={scores.green}
+        unvisited={scores.unvisited}
+      />
+
+      <div className="flex w-full items-center justify-between gap-3">
         <span className="font-body tabular-nums text-sm text-vm-muted">
           {deck.length ? index + 1 : 0}/{deck.length}
         </span>
         <div
-          className="h-1 flex-1 max-w-[200px] overflow-hidden rounded-full bg-vm-line"
+          className="h-1 min-w-0 flex-1 max-w-[200px] overflow-hidden rounded-full bg-vm-line"
           role="progressbar"
           aria-valuenow={progress}
           aria-valuemin={0}
@@ -265,7 +419,24 @@ export function StudySession({
             style={{ width: `${progress}%` }}
           />
         </div>
+        <button
+          type="button"
+          onClick={restartDeck}
+          disabled={!canReset}
+          className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-vm-line bg-vm-bg px-2.5 py-1.5 font-body text-xs text-vm-muted transition-colors hover:bg-vm-sidebar hover:text-vm-ink disabled:cursor-not-allowed disabled:opacity-35 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vm-accent"
+          aria-label="Reset group progress"
+        >
+          <RotateCcw size={14} aria-hidden strokeWidth={2} />
+          <span>Reset</span>
+        </button>
       </div>
+
+      <WordNumberBar
+        deckLength={deck.length}
+        currentIndex={index}
+        recallByIndex={recallByIndex}
+        onSelect={goToCard}
+      />
 
       <p className="sr-only">
         Swipe left marks red and shows the definition; swipe right marks green
