@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { Menu, Moon, Sun, X } from 'lucide-react'
 import { StudySession } from './components/StudySession'
+import { useColorScheme } from './hooks/useColorScheme'
 import { usePrefersReducedMotion } from './hooks/usePrefersReducedMotion'
 import { buildDailyDeck, todayDateString } from './lib/deck'
 import type { GroupSection, VocabularyBundle } from './types'
@@ -35,6 +37,7 @@ export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const reducedMotion = usePrefersReducedMotion()
+  const { isDark, toggle: toggleColorScheme } = useColorScheme()
 
   useEffect(() => {
     fetch('/vocabulary.json')
@@ -112,7 +115,7 @@ export default function App() {
         aria-label="Close menu"
         aria-hidden={!sidebarOpen}
         tabIndex={sidebarOpen ? 0 : -1}
-        className={`fixed inset-0 z-[100] bg-black/15 transition-opacity motion-safe:duration-200 ${
+        className={`fixed inset-0 z-[100] bg-black/15 transition-opacity motion-safe:duration-200 dark:bg-black/50 ${
           sidebarOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
         }`}
         onClick={() => setSidebarOpen(false)}
@@ -138,27 +141,17 @@ export default function App() {
           <button
             type="button"
             onClick={() => setSidebarOpen(false)}
-            className="rounded-md p-2 text-vm-muted hover:bg-black/[0.04] hover:text-vm-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vm-accent"
+            className="rounded-md p-2 text-vm-muted hover:bg-vm-hover hover:text-vm-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vm-accent"
             aria-label="Close menu"
           >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              aria-hidden
-            >
-              <path d="M18 6L6 18M6 6l12 12" />
-            </svg>
+            <X size={20} aria-hidden strokeWidth={2} />
           </button>
         </div>
 
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 py-6 [-webkit-overflow-scrolling:touch]">
           <div className="flex flex-col gap-8 pb-safe">
             {loadErr && (
-              <p className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
+              <p className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800 dark:border-red-900/60 dark:bg-red-950/50 dark:text-red-200">
                 {loadErr}
               </p>
             )}
@@ -179,7 +172,7 @@ export default function App() {
                     className={`rounded-md px-3 py-2 text-left font-body text-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vm-accent ${
                       selectedGroupId === g.id
                         ? 'bg-vm-accent-soft font-medium text-vm-ink'
-                        : 'text-vm-muted hover:bg-black/[0.04] hover:text-vm-ink'
+                        : 'text-vm-muted hover:bg-vm-hover hover:text-vm-ink'
                     }`}
                   >
                     Group {g.id}{' '}
@@ -269,27 +262,31 @@ export default function App() {
           />
           Vocab Mountain
         </h1>
-        <button
-          type="button"
-          onClick={() => setSidebarOpen(true)}
-          className="flex items-center gap-2 rounded-md border border-vm-line bg-vm-bg px-3 py-2 font-body text-sm text-vm-ink hover:bg-vm-sidebar focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vm-accent"
-          aria-expanded={sidebarOpen}
-          aria-controls="app-sidebar"
-          aria-label="Open deck settings"
-        >
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            aria-hidden
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={toggleColorScheme}
+            className="flex items-center justify-center rounded-md border border-vm-line bg-vm-bg p-2 text-vm-ink hover:bg-vm-sidebar focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vm-accent"
+            aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
           >
-            <path d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-          <span className="hidden sm:inline">Menu</span>
-        </button>
+            {isDark ? (
+              <Sun size={18} aria-hidden strokeWidth={2} />
+            ) : (
+              <Moon size={18} aria-hidden strokeWidth={2} />
+            )}
+          </button>
+          <button
+            type="button"
+            onClick={() => setSidebarOpen(true)}
+            className="flex items-center gap-2 rounded-md border border-vm-line bg-vm-bg px-3 py-2 font-body text-sm text-vm-ink hover:bg-vm-sidebar focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vm-accent"
+            aria-expanded={sidebarOpen}
+            aria-controls="app-sidebar"
+            aria-label="Open deck settings"
+          >
+            <Menu size={18} aria-hidden strokeWidth={2} />
+            <span className="hidden sm:inline">Menu</span>
+          </button>
+        </div>
       </header>
 
       <main className="flex flex-1 flex-col items-center px-4 py-8 md:px-8 md:py-12">

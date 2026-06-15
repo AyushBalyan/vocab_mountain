@@ -12,10 +12,10 @@ type FlipCardProps = {
 
 function toneClasses(mark: RecallMark | null | undefined): string {
   if (mark === 'remembered') {
-    return 'border-emerald-200/90 bg-emerald-50/95 shadow-emerald-950/[0.06]'
+    return 'border-emerald-200/90 bg-emerald-50/95 shadow-emerald-950/[0.06] dark:border-emerald-800/80 dark:bg-emerald-950/45 dark:shadow-black/20'
   }
   if (mark === 'forgotten') {
-    return 'border-rose-200/90 bg-rose-50/95 shadow-rose-950/[0.06]'
+    return 'border-rose-200/90 bg-rose-50/95 shadow-rose-950/[0.06] dark:border-rose-800/80 dark:bg-rose-950/45 dark:shadow-black/20'
   }
   return 'border-vm-line bg-vm-paper shadow-[var(--shadow-card)]'
 }

@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-display: 'Spectral', ui-serif, Georgia, serif;
   --font-body: 'Newsreader', ui-serif, Georgia, serif;
@@ -12,10 +14,25 @@
   --color-vm-accent: #b8452f;
   --color-vm-accent-soft: rgba(184, 69, 47, 0.08);
   --color-vm-line: rgba(26, 24, 22, 0.08);
+  --color-vm-hover: rgba(26, 24, 22, 0.04);
 
   --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
 
   --animate-vmFade: vmFade 0.45s ease-out both;
+}
+
+.dark {
+  --color-vm-bg: #12100e;
+  --color-vm-paper: #1a1714;
+  --color-vm-sidebar: #1f1c19;
+  --color-vm-ink: #f5f2ef;
+  --color-vm-muted: #a39e99;
+  --color-vm-accent: #e06b52;
+  --color-vm-accent-soft: rgba(224, 107, 82, 0.14);
+  --color-vm-line: rgba(245, 242, 239, 0.1);
+  --color-vm-hover: rgba(245, 242, 239, 0.06);
+
+  --shadow-card: 0 4px 28px rgba(0, 0, 0, 0.35), 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 @keyframes vmFade {
@@ -44,6 +61,10 @@ html {
   color-scheme: light;
 }
 
+html.dark {
+  color-scheme: dark;
+}
+
 body {
   margin: 0;
   min-height: 100dvh;
@@ -64,6 +85,10 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280' viewBox='0 0 280 280'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
+.dark .vm-grain::before {
+  opacity: 0.045;
+}
+
 .vm-grain::after {
   content: '';
   pointer-events: none;
@@ -78,6 +103,19 @@ body {
     radial-gradient(
       ellipse 65% 45% at 96% 102%,
       rgba(26, 24, 22, 0.025),
+      transparent 48%
+    );
+}
+
+.dark .vm-grain::after {
+  background: radial-gradient(
+      ellipse 90% 55% at 8% -8%,
+      rgba(224, 107, 82, 0.08),
+      transparent 52%
+    ),
+    radial-gradient(
+      ellipse 65% 45% at 96% 102%,
+      rgba(0, 0, 0, 0.2),
       transparent 48%
     );
 }

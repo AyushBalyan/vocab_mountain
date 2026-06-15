@@ -35,16 +35,16 @@ function numberPillClasses(
   if (mark === 'forgotten') {
     return `${base} ${
       cardIndex === currentIndex
-        ? 'border-rose-500 bg-rose-100 text-rose-950 ring-2 ring-rose-400/60'
-        : 'border-rose-300/90 bg-rose-50 text-rose-900 hover:bg-rose-100/90'
+        ? 'border-rose-500 bg-rose-100 text-rose-950 ring-2 ring-rose-400/60 dark:border-rose-400 dark:bg-rose-950/70 dark:text-rose-100 dark:ring-rose-500/40'
+        : 'border-rose-300/90 bg-rose-50 text-rose-900 hover:bg-rose-100/90 dark:border-rose-800 dark:bg-rose-950/45 dark:text-rose-200 dark:hover:bg-rose-950/65'
     }`
   }
 
   if (mark === 'remembered') {
     return `${base} ${
       cardIndex === currentIndex
-        ? 'border-emerald-600 bg-emerald-100 text-emerald-950 ring-2 ring-emerald-400/60'
-        : 'border-emerald-300/90 bg-emerald-50 text-emerald-900 hover:bg-emerald-100/90'
+        ? 'border-emerald-600 bg-emerald-100 text-emerald-950 ring-2 ring-emerald-400/60 dark:border-emerald-400 dark:bg-emerald-950/70 dark:text-emerald-100 dark:ring-emerald-500/40'
+        : 'border-emerald-300/90 bg-emerald-50 text-emerald-900 hover:bg-emerald-100/90 dark:border-emerald-800 dark:bg-emerald-950/45 dark:text-emerald-200 dark:hover:bg-emerald-950/65'
     }`
   }
 
@@ -70,18 +70,18 @@ function ScoreCard({
       aria-label="Session score"
     >
       <div className="flex flex-col items-center gap-0.5">
-        <span className="font-body text-[10px] font-semibold uppercase tracking-wide text-rose-700">
+        <span className="font-body text-[10px] font-semibold uppercase tracking-wide text-rose-700 dark:text-rose-400">
           Red
         </span>
-        <span className="font-display text-lg font-semibold tabular-nums text-rose-950">
+        <span className="font-display text-lg font-semibold tabular-nums text-rose-950 dark:text-rose-100">
           {red}
         </span>
       </div>
       <div className="flex flex-col items-center gap-0.5 border-x border-vm-line">
-        <span className="font-body text-[10px] font-semibold uppercase tracking-wide text-emerald-700">
+        <span className="font-body text-[10px] font-semibold uppercase tracking-wide text-emerald-700 dark:text-emerald-400">
           Green
         </span>
-        <span className="font-display text-lg font-semibold tabular-nums text-emerald-950">
+        <span className="font-display text-lg font-semibold tabular-nums text-emerald-950 dark:text-emerald-100">
           {green}
         </span>
       </div>
@@ -472,8 +472,8 @@ export function StudySession({
           disabled={deck.length === 0}
           className={`rounded-full border px-3 py-2.5 font-body text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-35 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-400 ${
             recallMark === 'forgotten'
-              ? 'border-rose-500 bg-rose-100 ring-2 ring-rose-400/70 ring-offset-2 ring-offset-vm-bg text-rose-950'
-              : 'border-rose-300/90 bg-rose-50 text-rose-950 hover:bg-rose-100/90'
+              ? 'border-rose-500 bg-rose-100 ring-2 ring-rose-400/70 ring-offset-2 ring-offset-vm-bg text-rose-950 dark:border-rose-400 dark:bg-rose-950/70 dark:text-rose-100 dark:ring-rose-500/40'
+              : 'border-rose-300/90 bg-rose-50 text-rose-950 hover:bg-rose-100/90 dark:border-rose-800 dark:bg-rose-950/45 dark:text-rose-200 dark:hover:bg-rose-950/65'
           }`}
           aria-keyshortcuts="R"
           aria-pressed={recallMark === 'forgotten'}
@@ -490,8 +490,8 @@ export function StudySession({
           disabled={deck.length === 0}
           className={`rounded-full border px-3 py-2.5 font-body text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-35 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500 ${
             recallMark === 'remembered'
-              ? 'border-emerald-600 bg-emerald-100 ring-2 ring-emerald-400/70 ring-offset-2 ring-offset-vm-bg text-emerald-950'
-              : 'border-emerald-300/90 bg-emerald-50 text-emerald-950 hover:bg-emerald-100/90'
+              ? 'border-emerald-600 bg-emerald-100 ring-2 ring-emerald-400/70 ring-offset-2 ring-offset-vm-bg text-emerald-950 dark:border-emerald-400 dark:bg-emerald-950/70 dark:text-emerald-100 dark:ring-emerald-500/40'
+              : 'border-emerald-300/90 bg-emerald-50 text-emerald-950 hover:bg-emerald-100/90 dark:border-emerald-800 dark:bg-emerald-950/45 dark:text-emerald-200 dark:hover:bg-emerald-950/65'
           }`}
           aria-keyshortcuts="G"
           aria-pressed={recallMark === 'remembered'}

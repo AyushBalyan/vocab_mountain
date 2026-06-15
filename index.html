@@ -12,6 +12,15 @@
       rel="stylesheet"
     />
     <title>Vocab Mountain · GRE flashcards</title>
+    <script>
+      try {
+        var t = localStorage.getItem('vocabMountain:theme')
+        var dark =
+          t === 'dark' ||
+          (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)
+        if (dark) document.documentElement.classList.add('dark')
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>
